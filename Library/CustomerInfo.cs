@@ -35,11 +35,6 @@ namespace Library
             private set { LoadProperty(AddressProperty, value); }
         }
 
-        //public override string ToString()
-        //{
-        //    return CompanyName;
-        //}
-
         #endregion
 
         #region Constructor
@@ -79,10 +74,6 @@ namespace Library
         #endregion
 
         #region Data
-
-#if !SILVERLIGHT
-
-
         private void DataPortal_Fetch(int idCustomer)
         {
             using (var ctx = DalFactory.GetManager())
@@ -105,9 +96,6 @@ namespace Library
             Name = item.Name;
             Id = item.Id;
         }
-
-
-#endif
         #endregion
     }
 }

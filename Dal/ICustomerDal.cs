@@ -19,9 +19,9 @@ namespace Dal
         //CustomerDto FetchOnByName(string Name);
         //bool Exists(int idCustomer);
         //bool Exists(int idCustomer, int adminId);
-        //void Insert(CustomerDto item);
-        //void Update(CustomerDto item);
-        //void Delete(int idCustomer);
+        void Insert(CustomerDto item);
+        void Update(CustomerDto item);
+        void Delete(int idCustomer);
 
         // For BDD Saving
 

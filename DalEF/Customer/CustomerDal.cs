@@ -37,6 +37,7 @@ namespace DalEF
                 Name = c.Name
             };
         }
+
         //public List<CustomerDto> Fetch()
         //{
         //    using (var ctx = ObjectContextManager<RTIMEntitiesContainer>.GetManager("RTIMEntities"))
@@ -52,5 +53,59 @@ namespace DalEF
         //        return result.ToList();
         //    }
         //}
+
+        public void Insert(CustomerDto item)
+        {
+            using (var ctx = DbContextManager<ModelContainer>.GetManager("Model"))
+            {
+
+                var newItem = new Customer
+                {
+                    Address = item.Address,
+                    Name = item.Name
+                };
+
+                ctx.DbContext.Customers.Add(newItem);
+                ctx.DbContext.SaveChanges();
+
+                item.Id = newItem.IdCustomer;
+            }
+        }
+
+        public void Update(CustomerDto item)
+        {
+            using (var ctx = DbContextManager<ModelContainer>.GetManager("Model"))
+            {
+                var data = (from c in ctx.DbContext.Customers
+                            where (c.IdCustomer.Equals(item.Id)) && (c.Enable.Equals(true))
+                            select c).FirstOrDefault();
+
+                if (data == null)
+                    throw new DataNotFoundException("Customer");
+
+                data.Address = item.Address;
+                data.Name = item.Name;
+
+                var count = ctx.DbContext.SaveChanges();
+                if (count == 0)
+                    throw new Exception();
+            }
+        }
+
+        public void Delete(int idCustomer)
+        {
+            using (var ctx = DbContextManager<ModelContainer>.GetManager("Model"))
+            {
+                var data = (from c in ctx.DbContext.Customers
+                            where (c.IdCustomer.Equals(idCustomer)) && (c.Enable.Equals(true))
+                            select c).FirstOrDefault();
+
+                if (data == null)
+                    throw new DataNotFoundException("Customer");
+
+                data.Enable = false;
+                ctx.DbContext.SaveChanges();
+            }
+        }
     }
 }
