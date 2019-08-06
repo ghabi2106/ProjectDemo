@@ -14,51 +14,26 @@ namespace Library
     {
         #region Properties
 
-        public static PropertyInfo<int> IdProperty = RegisterProperty<int>(c => c.Id);
+        public static readonly PropertyInfo<int> IdProperty = RegisterProperty<int>(c => c.Id);
         public int Id
         {
             get { return GetProperty(IdProperty); }
             private set { LoadProperty(IdProperty, value); }
         }
 
-        public static PropertyInfo<string> NameProperty = RegisterProperty<string>(c => c.Name);
+        public static readonly PropertyInfo<string> NameProperty = RegisterProperty<string>(c => c.Name);
         public string Name
         {
             get { return GetProperty(NameProperty); }
             private set { LoadProperty(NameProperty, value); }
         }
 
-        public static PropertyInfo<string> AddressProperty = RegisterProperty<string>(c => c.Address);
+        public static readonly PropertyInfo<string> AddressProperty = RegisterProperty<string>(c => c.Address);
         public string Address
         {
             get { return GetProperty(AddressProperty); }
             private set { LoadProperty(AddressProperty, value); }
         }
-
-        #region Link
-
-        public static PropertyInfo<string> LinkForEditProperty = RegisterProperty<string>(c => c.LinkForEdit);
-        public string LinkForEdit
-        {
-            get { return GetProperty(LinkForEditProperty); }
-            set { LoadProperty(LinkForEditProperty, value); }
-        }
-
-        public static PropertyInfo<string> LinkForDetailProperty = RegisterProperty<string>(c => c.LinkForDetail);
-        public string LinkForDetail
-        {
-            get { return GetProperty(LinkForDetailProperty); }
-            set { LoadProperty(LinkForDetailProperty, value); }
-        }
-
-        public static PropertyInfo<string> LinkForDeleteProperty = RegisterProperty<string>(c => c.LinkForDelete);
-        public string LinkForDelete
-        {
-            get { return GetProperty(LinkForDeleteProperty); }
-            set { LoadProperty(LinkForDeleteProperty, value); }
-        }
-
-        #endregion
 
         //public override string ToString()
         //{
@@ -74,22 +49,30 @@ namespace Library
             Address = item.Address;
             Name = item.Name;
             Id = item.Id;
-
-            LinkForEdit = string.Empty;
-            LinkForDetail = string.Empty;
-            LinkForDelete = string.Empty;
         }
 
         public CustomerInfo()
         {
         }
 
+        public CustomerInfo(int id)
+        {
+            Id = id;
+        }
+
         #endregion
 
         #region Factory
 
-        public static async Task<CustomerInfo> GetCustomer(int idCustomer)
+        public static CustomerInfo GetCustomer(int idCustomer)
         {
+            var t = DataPortal.Fetch<CustomerInfo>(idCustomer);
+            return DataPortal.Fetch<CustomerInfo>(idCustomer);
+        }
+
+        public static async Task<CustomerInfo> GetCustomerAsync(int idCustomer)
+        {
+            //var t = DataPortal.FetchAsync<CustomerInfo>(idCustomer);
             return await DataPortal.FetchAsync<CustomerInfo>(idCustomer);
         }
 
@@ -121,10 +104,6 @@ namespace Library
             Address = item.Address;
             Name = item.Name;
             Id = item.Id;
-
-            LinkForEdit = string.Empty;
-            LinkForDetail = string.Empty;
-            LinkForDelete = string.Empty;
         }
 
 
