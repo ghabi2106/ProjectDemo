@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="CustomerEdit.cs" />
     <Compile Include="CustomerInfo.cs" />
+    <Compile Include="CustomerList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

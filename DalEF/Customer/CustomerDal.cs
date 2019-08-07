@@ -38,31 +38,32 @@ namespace DalEF
             };
         }
 
-        //public List<CustomerDto> Fetch()
-        //{
-        //    using (var ctx = ObjectContextManager<RTIMEntitiesContainer>.GetManager("RTIMEntities"))
-        //    {
-        //        var result = from c in ctx.ObjectContext.Customer
-        //                     where c.Enable.Equals(true)
-        //                     orderby c.Name
-        //                     select new CustomerDto
-        //                     {
-        //                         Address = c.Address,
-        //                         Name = c.Name
-        //                     };
-        //        return result.ToList();
-        //    }
-        //}
+        public List<CustomerDto> Fetch()
+        {
+            using (var ctx = DbContextManager<ModelContainer>.GetManager())
+            {
+                var result = from c in ctx.DbContext.Customers
+                             where c.Enable.Equals(true)
+                             orderby c.Name
+                             select new CustomerDto
+                             {
+                                 Address = c.Address,
+                                 Name = c.Name,
+                                 Id = c.IdCustomer
+                             };
+                return result.ToList();
+            }
+        }
 
         public void Insert(CustomerDto item)
         {
-            using (var ctx = DbContextManager<ModelContainer>.GetManager("Model"))
+            using (var ctx = DbContextManager<ModelContainer>.GetManager())
             {
-
                 var newItem = new Customer
                 {
                     Address = item.Address,
-                    Name = item.Name
+                    Name = item.Name,
+                    Enable = true
                 };
 
                 ctx.DbContext.Customers.Add(newItem);
@@ -74,7 +75,7 @@ namespace DalEF
 
         public void Update(CustomerDto item)
         {
-            using (var ctx = DbContextManager<ModelContainer>.GetManager("Model"))
+            using (var ctx = DbContextManager<ModelContainer>.GetManager())
             {
                 var data = (from c in ctx.DbContext.Customers
                             where (c.IdCustomer.Equals(item.Id)) && (c.Enable.Equals(true))
@@ -94,7 +95,7 @@ namespace DalEF
 
         public void Delete(int idCustomer)
         {
-            using (var ctx = DbContextManager<ModelContainer>.GetManager("Model"))
+            using (var ctx = DbContextManager<ModelContainer>.GetManager())
             {
                 var data = (from c in ctx.DbContext.Customers
                             where (c.IdCustomer.Equals(idCustomer)) && (c.Enable.Equals(true))

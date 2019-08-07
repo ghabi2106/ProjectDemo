@@ -8,7 +8,7 @@ namespace Dal
 {
     public interface ICustomerDal
     {
-        //List<CustomerDto> Fetch();
+        List<CustomerDto> Fetch();
         //List<CustomerDto> Fetch(string search, PagerDto pager, out int counterItem);
         //List<CustomerDto> Fetch(string companyNameFilter);
         //List<CustomerDto> Fetch(string companyNameFilter, int adminId);

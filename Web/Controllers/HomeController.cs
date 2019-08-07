@@ -14,7 +14,8 @@ namespace Web.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var customerList = CustomerList.GetCustomerList();
+            return View(customerList);
         }
 
         public ActionResult About()
@@ -49,7 +50,7 @@ namespace Web.Controllers
         public async Task<ActionResult> Create()
         {
             var customerCreate = await CustomerEdit.NewCustomerAsync();
-            return View("CustomerEdit", customerCreate);
+            return View(customerCreate);
         }
 
         [HttpPost]
@@ -64,7 +65,7 @@ namespace Web.Controllers
                     if (customerCreate.IsSavable)
                     {
                         customerCreate = await customerCreate.SaveAsync();
-                        return RedirectToAction("Edit", new { idCustomer = customerCreate.Id });
+                        return RedirectToAction("Edit", new { id = customerCreate.Id });
                     }
                 }
             }
@@ -97,13 +98,19 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(FormCollection collection, int idCustomer)
+        public async Task<ActionResult> Edit(FormCollection collection, int? id)
         {
 
-            var customerGetter = await CustomerEdit.GetExistingCustomerAsync(idCustomer);
+            var customer = await CustomerEdit.GetCustomerAsync((int)id);
+
             if (ModelState.IsValid)
             {
-                TryUpdateModel(customerGetter, collection);
+                TryUpdateModel(customer, collection);
+
+                if (customer.IsSavable)
+                {
+                    customer.Save();
+                }
 
                 //if (!customerGetter.IsValid)
                 //{
@@ -111,7 +118,7 @@ namespace Web.Controllers
                 //}
             }
 
-            return View(customerGetter);
+            return View(customer);
         }
         #endregion Edit
 
@@ -141,6 +148,11 @@ namespace Web.Controllers
         {
             try
             {
+                var customer = await CustomerEdit.GetCustomerAsync(id);
+                if(customer.Id != id)
+                {
+                    return HttpNotFound();
+                }
                 await CustomerEdit.DeleteCustomerAsync(id);
             }
             catch (DataException/* dex */)

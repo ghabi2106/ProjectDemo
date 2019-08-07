@@ -8,9 +8,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Threading.Tasks;
 using Csla.Configuration;
-#if !SILVERLIGHT
 using Dal;
-#endif
 
 namespace Library
 {
@@ -153,10 +151,22 @@ namespace Library
             }
         }
 
-        //private void DataPortal_Delete(int id)
-        //{
-        //    DataPortal_Delete(id);
-        //}
+        protected override void DataPortal_DeleteSelf()
+        {
+            using (BypassPropertyChecks)
+            {
+                DataPortal_Delete(this.Id);
+            }
+        }
+
+        private void DataPortal_Delete(int id)
+        {
+            using (var ctx = DalFactory.GetManager())
+            {
+                var dal = ctx.GetProvider<ICustomerDal>();
+                dal.Delete(id);
+            }
+        }
         #endregion
 
         #region Criteria
